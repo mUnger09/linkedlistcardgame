@@ -9,8 +9,6 @@ import java.io.IOException;
 //import java.util.List;
 import java.util.Scanner;
 
-
-
 public class CardGame {
 	
 	private static LinkList cardList = new LinkList();  // make list
