@@ -5,13 +5,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 //import java.util.ArrayList;
 //import java.util.List;
 import java.util.Scanner;
 
 public class CardGame {
 	
-	private static LinkList cardList = new LinkList();  // make list
+	private static LinkedList cardList = new LinkedList();  // make list
 
 	public static void main(String[] args) {
 
@@ -44,21 +47,66 @@ public class CardGame {
             System.err.println("Error reading file: " + e.getMessage());
         }
 
-        // Print the loaded cards
-        System.out.println("Cards loaded:");
-        cardList.displayList();
-		
-		Card[] playerHand = new Card[5];
-		for(int i = 0; i < playerHand.length; i++)
-			playerHand[i] = cardList.getFirst();
-		
-		System.out.println("players hand");
-		for(int i = 0; i < playerHand.length; i++)
-			System.out.println(playerHand[i]);
-		
-		System.out.println();
-		System.out.println("the deck");
-		cardList.displayList();
+        // Shuffle or randomize the deck manually
+        ArrayList<Card> allCards = new ArrayList<>();
+        while (true) {
+            try {
+                allCards.add(cardList.getFirst());
+            } catch (Exception e) {
+                break;
+            }
+        }
+        Collections.shuffle(allCards);
+
+        // Split into player and computer decks
+        LinkedList playerDeck = new LinkedList();
+        LinkedList cpuDeck = new LinkedList();
+
+        for (int i = 0; i < allCards.size(); i++) {
+            if (i % 2 == 0)
+                playerDeck.add(allCards.get(i));
+            else
+                cpuDeck.add(allCards.get(i));
+        }
+
+        int playerScore = 0;
+        int cpuScore = 0;
+        int rounds = Math.min(allCards.size() / 2, 26);
+        Scanner nextRound = new Scanner(System.in);
+
+        for (int i = 0; i < rounds; i++) {
+            Card playerCard = playerDeck.getFirst();
+            Card cpuCard = cpuDeck.getFirst();
+
+            System.out.println("Round " + (i+1));
+            System.out.println("Player plays: " + playerCard);
+            System.out.println("Computer plays: " + cpuCard);
+
+            if (playerCard.getCardValue() > cpuCard.getCardValue()) {
+                System.out.println("Player wins this round!");
+                playerScore++;
+            } else if (cpuCard.getCardValue() > playerCard.getCardValue()) {
+                System.out.println("Computer wins this round!");
+                cpuScore++;
+            } else {
+                System.out.println("It's a tie!");
+                // Optional: war logic here
+            }
+            System.out.println();
+            System.out.println("Next round? (press any key)");
+            if (nextRound.hasNext()) {
+                nextRound = new Scanner(System.in);
+                continue;
+            }
+        }
+
+        System.out.println("Final Score:");
+        System.out.println("Player: " + playerScore);
+        System.out.println("Computer: " + cpuScore);
+
+        if (playerScore > cpuScore) System.out.println("Player wins!");
+        else if (cpuScore > playerScore) System.out.println("Computer wins!");
+        else System.out.println("Tie!");
 
 	}//end main
 
