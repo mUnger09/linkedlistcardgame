@@ -68,7 +68,9 @@ public class CardGame {
             else
                 cpuDeck.add(allCards.get(i));
         }
-
+		
+	//My code
+	//Added the "War" card game, compares the value of cards and whoever has the greater card value wins.
         int playerScore = 0;
         int cpuScore = 0;
         int rounds = Math.min(allCards.size() / 2, 26);
@@ -90,7 +92,6 @@ public class CardGame {
                 cpuScore++;
             } else {
                 System.out.println("It's a tie!");
-                // Optional: war logic here
             }
             System.out.println();
             System.out.println("Next round? (press any key)");
